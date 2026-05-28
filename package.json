@@ -9,37 +9,28 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.4.0",
-    "@stripe/stripe-js": "^9.7.0",
-    "@supabase/supabase-js": "^2.106.2",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "framer-motion": "^12.40.0",
-    "lucide-react": "^1.16.0",
-    "next": "^15.5.18",
-    "next-themes": "^0.4.6",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
-    "react-hook-form": "^7.76.1",
-    "stripe": "^22.1.1",
-    "tailwind-merge": "^3.6.0",
-    "twilio": "^6.0.2",
-    "zod": "^3.23.8"
+    "next": "^15.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.53.0",
+    "framer-motion": "^11.0.0",
+    "lucide-react": "^0.400.0",
+    "clsx": "^2.0.0",
+    "tailwind-merge": "^2.0.0",
+    "next-themes": "^0.3.0",
+    "class-variance-authority": "^0.7.0",
+    "@stripe/stripe-js": "^5.0.0",
+    "stripe": "^17.0.0",
+    "@supabase/supabase-js": "^2.0.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "^15.5.18",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5",
+    "eslint": "^9",
+    "eslint-config-next": "^15.0.0"
   }
 }
-/home/engine/.bashrc: line 1: syntax error near unexpected token `('
-/home/engine/.bashrc: line 1: `. /etc/profile.d/workload-containment.shn# ~/.bashrc: executed by bash(1) for non-login shells.'
-/home/engine/.bashrc: line 1: syntax error near unexpected token `('
-/home/engine/.bashrc: line 1: `. /etc/profile.d/workload-containment.shn# ~/.bashrc: executed by bash(1) for non-login shells.'
-/home/engine/.bashrc: line 1: syntax error near unexpected token `('
-/home/engine/.bashrc: line 1: `. /etc/profile.d/workload-containment.shn# ~/.bashrc: executed by bash(1) for non-login shells.'
