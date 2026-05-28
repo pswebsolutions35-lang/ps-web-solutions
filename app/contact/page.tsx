@@ -20,20 +20,20 @@ import {
 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import { z } from 'zod';
 import { useState } from 'react';
 
-const contactSchema = z.z.object({
-  name: z.z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.z.string().email('Invalid email address'),
-  phone: z.z.string().min(10, 'Invalid phone number'),
-  company: z.z.string().optional(),
-  service: z.z.string().min(1, 'Please select a service'),
-  budget: z.z.string().min(1, 'Please select a budget range'),
-  message: z.z.string().min(10, 'Message must be at least 10 characters'),
+const contactSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Invalid email address'),
+  phone: z.string().min(10, 'Invalid phone number'),
+  company: z.string().optional(),
+  service: z.string().min(1, 'Please select a service'),
+  budget: z.string().min(1, 'Please select a budget range'),
+  message: z.string().min(10, 'Message must be at least 10 characters'),
 });
 
-type ContactFormValues = z.z.infer<typeof contactSchema>;
+type ContactFormValues = z.infer<typeof contactSchema>;
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,204 +51,202 @@ export default function ContactPage() {
   const onSubmit = async (data: ContactFormValues) => {
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/leads', {
+      const res = await fetch('/api/leads', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...data,
-          source: 'contact-page'
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
       });
-
-      const result = await response.json();
-      
-      if (result.success) {
+      if (res.ok) {
         setIsSuccess(true);
         reset();
-      } else {
-        throw new Error(result.error || 'Failed to submit lead');
+        setTimeout(() => setIsSuccess(false), 5000);
       }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('Something went wrong. Please try again or call us directly.');
+    } catch (err) {
+      console.error('Error submitting form:', err);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="bg-black pt-32 pb-24">
-      <Container>
-        <div className="max-w-4xl mx-auto text-center mb-16">
-          <Badge variant="default" className="mb-4">Get In Touch</Badge>
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-            Let's Build Something <br />
-            <span className="text-brand-blue">Great Together</span>
-          </h1>
-          <p className="text-xl text-gray-400">
-            Have a project in mind? We'd love to hear from you. 
-            Fill out the form below and we'll get back to you within 2 hours.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Contact Info */}
-          <div className="lg:col-span-5 space-y-8">
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-white">Contact Information</h2>
-              <div className="space-y-4">
-                {[
-                  { icon: Mail, label: 'Email', value: 'hello@pswebsolutions.com' },
-                  { icon: Phone, label: 'Phone', value: '+1 (555) 000-0000' },
-                  { icon: MapPin, label: 'Location', value: 'Austin, Texas' },
-                  { icon: Clock, label: 'Response Time', value: 'Within 2 hours guaranteed' },
-                ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-4 p-4 rounded-xl border border-white/5 bg-white/5">
-                    <div className="h-10 w-10 rounded-lg bg-brand-blue/10 flex items-center justify-center shrink-0">
-                      <item.icon className="h-5 w-5 text-brand-blue" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-gray-500">{item.label}</p>
-                      <p className="text-white font-medium">{item.value}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-6 pt-4">
-              <h2 className="text-2xl font-bold text-white">Why Choose Us?</h2>
-              <ul className="space-y-3">
-                {[
-                  '50+ businesses served',
-                  '98% client satisfaction rate',
-                  'Conversion-focused approach',
-                  'Dedicated project manager',
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-gray-300">
-                    <CheckCircle2 className="h-5 w-5 text-brand-blue" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="flex gap-4 pt-4">
-              {[Twitter, Instagram, Facebook, Linkedin].map((Icon, i) => (
-                <a key={i} href="#" className="h-12 w-12 flex items-center justify-center rounded-full border border-white/10 hover:border-brand-blue hover:text-brand-blue transition-colors text-gray-400 bg-white/5">
-                  <Icon className="h-6 w-6" />
-                </a>
-              ))}
-            </div>
+    <main className="bg-black min-h-screen">
+      {/* Hero */}
+      <section className="pt-32 pb-16 md:pt-40 md:pb-20">
+        <Container>
+          <div className="text-center max-w-3xl mx-auto">
+            <Badge variant="default" className="mb-4">Get in Touch</Badge>
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+              Let's Build Something <span className="text-brand-blue">Great Together</span>
+            </h1>
+            <p className="text-lg text-gray-400 mb-8">
+              Tell us about your project and we'll create a custom strategy to grow your business.
+            </p>
           </div>
+        </Container>
+      </section>
 
-          {/* Contact Form */}
-          <div className="lg:col-span-7">
-            <Card className="p-8 border-white/10">
+      {/* Contact Form + Info */}
+      <section className="pb-24">
+        <Container>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            {/* Form */}
+            <Card className="p-8 border-white/10 bg-white/[0.02]">
               {isSuccess ? (
                 <div className="text-center py-12">
-                  <div className="h-20 w-20 rounded-full bg-brand-blue/10 flex items-center justify-center mx-auto mb-6">
-                    <CheckCircle2 className="h-10 w-10 text-brand-blue" />
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-500/10 mb-6">
+                    <CheckCircle2 className="h-8 w-8 text-green-500" />
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-4">Message Sent!</h3>
-                  <p className="text-gray-400 mb-8">
-                    Thank you for reaching out. A member of our team will contact you within the next 2 hours.
-                  </p>
-                  <Button onClick={() => setIsSuccess(false)} variant="outline">Send Another Message</Button>
+                  <h3 className="text-2xl font-bold text-white mb-2">Message Sent!</h3>
+                  <p className="text-gray-400">We'll get back to you within 2 hours.</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-400">Full Name</label>
-                      <Input placeholder="John Doe" {...register('name')} />
-                      {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <Input
+                        placeholder="Your Name *"
+                        {...register('name')}
+                        className={errors.name ? 'border-red-500' : ''}
+                      />
+                      {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-400">Email Address</label>
-                      <Input type="email" placeholder="john@example.com" {...register('email')} />
-                      {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-400">Phone Number</label>
-                      <Input placeholder="+1 (555) 000-0000" {...register('phone')} />
-                      {errors.phone && <p className="text-xs text-red-500">{errors.phone.message}</p>}
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-400">Company Name (Optional)</label>
-                      <Input placeholder="Acme Inc." {...register('company')} />
+                    <div>
+                      <Input
+                        placeholder="Your Email *"
+                        {...register('email')}
+                        className={errors.email ? 'border-red-500' : ''}
+                      />
+                      {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
                     </div>
                   </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-400">Service Interested In</label>
-                      <select 
-                        className="flex h-12 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue transition-all"
-                        {...register('service')}
-                      >
-                        <option value="" className="bg-black">Select a service</option>
-                        <option value="web-design" className="bg-black">Website Design</option>
-                        <option value="seo" className="bg-black">Local SEO</option>
-                        <option value="gbp" className="bg-black">GBP Optimization</option>
-                        <option value="other" className="bg-black">Other</option>
-                      </select>
-                      {errors.service && <p className="text-xs text-red-500">{errors.service.message}</p>}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <Input
+                        placeholder="Phone Number"
+                        {...register('phone')}
+                      />
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-400">Budget Range</label>
-                      <select 
-                        className="flex h-12 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue transition-all"
-                        {...register('budget')}
-                      >
-                        <option value="" className="bg-black">Select budget</option>
-                        <option value="1500-3000" className="bg-black">$1,500 - $3,000</option>
-                        <option value="3000-5000" className="bg-black">$3,000 - $5,000</option>
-                        <option value="5000+" className="bg-black">$5,000+</option>
-                      </select>
-                      {errors.budget && <p className="text-xs text-red-500">{errors.budget.message}</p>}
+                    <div>
+                      <Input
+                        placeholder="Company Name"
+                        {...register('company')}
+                      />
                     </div>
                   </div>
-
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-400">Project Details</label>
-                    <Textarea 
-                      placeholder="Tell us about your goals and what you're looking for..." 
+                  <div>
+                    <select
+                      {...register('service')}
+                      className="w-full h-12 px-4 rounded-xl border border-white/10 bg-white/5 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent"
+                    >
+                      <option value="" className="bg-black">Select a service *</option>
+                      <option value="web-design" className="bg-black">Website Design</option>
+                      <option value="seo" className="bg-black">SEO</option>
+                      <option value="gbp" className="bg-black">Google Business Profile</option>
+                      <option value="booking" className="bg-black">Booking System</option>
+                      <option value="chatbot" className="bg-black">AI Chatbot</option>
+                      <option value="other" className="bg-black">Other</option>
+                    </select>
+                    {errors.service && <p className="text-red-500 text-sm mt-1">{errors.service.message}</p>}
+                  </div>
+                  <div>
+                    <select
+                      {...register('budget')}
+                      className="w-full h-12 px-4 rounded-xl border border-white/10 bg-white/5 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent"
+                    >
+                      <option value="" className="bg-black">Budget Range *</option>
+                      <option value="1500" className="bg-black">$1,500 - Starter</option>
+                      <option value="3000" className="bg-black">$3,000 - Growth</option>
+                      <option value="5000" className="bg-black">$5,000+ - Premium</option>
+                      <option value="custom" className="bg-black">Custom / Not Sure</option>
+                    </select>
+                    {errors.budget && <p className="text-red-500 text-sm mt-1">{errors.budget.message}</p>}
+                  </div>
+                  <div>
+                    <Textarea
+                      placeholder="Tell us about your project *"
+                      className={errors.message ? 'border-red-500' : ''}
                       {...register('message')}
                     />
-                    {errors.message && <p className="text-xs text-red-500">{errors.message.message}</p>}
+                    {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
                   </div>
-
-                  <Button type="submit" className="w-full h-14 text-lg" isLoading={isSubmitting}>
-                    Send Message
+                  <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
                   </Button>
                 </form>
               )}
             </Card>
-          </div>
-        </div>
 
-        {/* Map Placeholder */}
-        <div className="mt-24 rounded-2xl overflow-hidden border border-white/10 h-[400px] bg-white/5 relative flex items-center justify-center">
-          <div className="text-center">
-            <MapPin className="h-12 w-12 text-brand-blue mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-white mb-2">Our Office</h3>
-            <p className="text-gray-400">Austin, Texas, United States</p>
+            {/* Contact Info */}
+            <div className="space-y-8">
+              <div className="space-y-6">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 rounded-xl bg-brand-blue/10 text-brand-blue">
+                    <Mail className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-white mb-1">Email</h4>
+                    <p className="text-gray-400">hello@pswebsolutions.com</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="p-3 rounded-xl bg-brand-blue/10 text-brand-blue">
+                    <Phone className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-white mb-1">Phone</h4>
+                    <p className="text-gray-400">(512) 555-0123</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="p-3 rounded-xl bg-brand-blue/10 text-brand-blue">
+                    <MapPin className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-white mb-1">Location</h4>
+                    <p className="text-gray-400">Austin, Texas</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="p-3 rounded-xl bg-brand-blue/10 text-brand-blue">
+                    <Clock className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-white mb-1">Response Time</h4>
+                    <p className="text-gray-400">We respond within 2 hours</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Trust Signals */}
+              <Card className="p-6 border-white/10 bg-white/[0.02]">
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <p className="text-2xl font-bold text-white">50+</p>
+                    <p className="text-sm text-gray-500">Sites Built</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-white">98%</p>
+                    <p className="text-sm text-gray-500">Satisfaction</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-white">2hr</p>
+                    <p className="text-sm text-gray-500">Avg Response</p>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Social Links */}
+              <div className="flex gap-4">
+                {[Instagram, Twitter, Facebook, Linkedin].map((Icon, i) => (
+                  <a key={i} href="#" className="h-12 w-12 flex items-center justify-center rounded-xl border border-white/10 hover:border-brand-blue hover:text-brand-blue text-gray-500 transition-all">
+                    <Icon className="h-5 w-5" />
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
-          {/* In a real app, you'd embed a Google Map iframe here */}
-        </div>
-      </Container>
-    </div>
+        </Container>
+      </section>
+    </main>
   );
 }
-/home/engine/.bashrc: line 1: syntax error near unexpected token `('
-/home/engine/.bashrc: line 1: `. /etc/profile.d/workload-containment.shn# ~/.bashrc: executed by bash(1) for non-login shells.'
-/home/engine/.bashrc: line 1: syntax error near unexpected token `('
-/home/engine/.bashrc: line 1: `. /etc/profile.d/workload-containment.shn# ~/.bashrc: executed by bash(1) for non-login shells.'
-/home/engine/.bashrc: line 1: syntax error near unexpected token `('
-/home/engine/.bashrc: line 1: `. /etc/profile.d/workload-containment.shn# ~/.bashrc: executed by bash(1) for non-login shells.'
